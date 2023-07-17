@@ -53,16 +53,16 @@ class _Home_screenState extends State<Home_screen> {
                 const SizedBox(
                   height: 10,
                 ),
-                 InkWell( onTap: (){
-                   selected=null;
-                   Selected_Screen=Category_srceen(onclickCategory);
-                   selectedTitle=true;
-                   Navigator.pop(context);
-                   setState(() {
+                InkWell( onTap: (){
+                  selected=null;
+                  Selected_Screen=Category_srceen(onclickCategory);
+                  selectedTitle=true;
+                  Navigator.pop(context);
+                  setState(() {
 
-                   });
-                 },
-                   child: const Row(
+                  });
+                },
+                  child: const Row(
                     children: [
                       Icon(Icons.list, size: 30),
                       SizedBox(
@@ -76,8 +76,8 @@ class _Home_screenState extends State<Home_screen> {
                             color: Colors.black),
                       )
                     ],
+                  ),
                 ),
-                 ),
                 const SizedBox(
                   height: 10,
                 ),

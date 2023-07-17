@@ -6,10 +6,11 @@ import 'Container_source.dart';
 import 'acticle.dart';
 
 class NewsTaps extends StatefulWidget {
-  Container_Category category;
-  NewsTaps({required this.category});
+
   @override
   State<NewsTaps> createState() => _NewsTapsState();
+  Container_Category? category;
+  NewsTaps({this.category});
 }
 
 class _NewsTapsState extends State<NewsTaps> {
@@ -18,7 +19,7 @@ class _NewsTapsState extends State<NewsTaps> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManager.getSource(widget.category.title),
+      future: ApiManager.getSource(widget.category?.title??""),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text(snapshot.error.toString());
@@ -29,13 +30,13 @@ class _NewsTapsState extends State<NewsTaps> {
               length: sources.length,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TabBar(
                     tabs: sources
                         .map((sourse) => Container_sourse(
-                            sourse, selected == sources.indexOf(sourse)))
+                        sourse, selected == sources.indexOf(sourse)))
                         .toList(),
                     isScrollable: true,
                     indicatorColor: Colors.transparent,
@@ -47,7 +48,7 @@ class _NewsTapsState extends State<NewsTaps> {
                   Expanded(
                     child: TabBarView(
                         children:
-                            sources.map((sourse) => Article(sourse)).toList()),
+                        sources.map((sourse) => Article(sourse)).toList()),
                   )
                 ],
               ));
@@ -58,3 +59,4 @@ class _NewsTapsState extends State<NewsTaps> {
     );
   }
 }
+

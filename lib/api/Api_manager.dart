@@ -21,7 +21,7 @@ class ApiManager {
     var uri = Uri.http(baseURL, '/v2/everything',
         {'apiKey': apiKey, 'sources': source, 'q': q});
     var response = await http.get(uri);
-
+  print(response.body);
     var articleResponse = ArticleResponse.fromJson(jsonDecode(response.body));
     return articleResponse;
   }

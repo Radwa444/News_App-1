@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../shared/style/component/NewsTabs.dart';
+import '../News/NewsTabs.dart';
 import '../../shared/style/component/Search_screen.dart';
+import '../../shared/style/component/Settings.dart';
 import '../Category/Category.dart';
 
 class Home_screen extends StatefulWidget {
@@ -10,7 +11,16 @@ class Home_screen extends StatefulWidget {
   State<Home_screen> createState() => _Home_screenState();
 }
 
+
 class _Home_screenState extends State<Home_screen> {
+  late Widget Selected_Screen;
+  bool selectedTitle=true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Selected_Screen=Category_srceen(onclickCategory);
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,10 +40,10 @@ class _Home_screenState extends State<Home_screen> {
                   height: 100,
                   child: Container(
                     color: Colors.green,
-                    child: Center(
+                    child: const Center(
                         child: Text(
-                          selected == null ? 'NEWS APP!' : selected!.title,
-                          style: const TextStyle(
+                          'NEWS APP!' ,
+                          style: TextStyle(
                               fontSize: 25,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
@@ -43,38 +53,57 @@ class _Home_screenState extends State<Home_screen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
-                  children: [
-                    Icon(Icons.list, size: 30),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Categorice',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    )
-                  ],
+                InkWell( onTap: (){
+                  selected=null;
+                  Selected_Screen=Category_srceen(onclickCategory);
+                  selectedTitle=true;
+                  Navigator.pop(context);
+                  setState(() {
+
+                  });
+                },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.list, size: 30),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Categorice',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
-                  children: [
-                    Icon(Icons.settings, size: 30),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'settings',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    )
-                  ],
+                InkWell(onTap: (){
+                  Selected_Screen=Settings();
+                  Navigator.pop(context);
+                  selectedTitle=false;
+                  setState(() {
+
+                  });
+                },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.settings, size: 30),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'settings',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -91,18 +120,15 @@ class _Home_screenState extends State<Home_screen> {
                     size: 30,
                   ))
             ],
-            title: const Text('News app',
-                style: TextStyle(
+            title:  Text(selectedTitle==false?'Settings': selected == null ? 'News app' : selected!.title,
+                style: const TextStyle(
                   fontSize: 30,
                   color: Colors.white,
                 )),
             centerTitle: true,
           ),
-          body: selected == null
-              ? Category_srceen(onclickCategory)
-              : NewsTaps(
-            category: selected!,
-          ),
+          body: Selected_Screen,
+
         ),
       ),
     );
@@ -110,7 +136,10 @@ class _Home_screenState extends State<Home_screen> {
 
   Container_Category? selected = null;
   onclickCategory(Container_Category Category) {
-    selected == Category;
+    selected = Category;
+    Selected_Screen=NewsTaps(category: selected!,);
+    selectedTitle=true;
+    print(selected);
     setState(() {});
   }
 }

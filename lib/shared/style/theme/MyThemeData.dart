@@ -6,7 +6,7 @@ class MyThemeData {
     appBarTheme: AppBarTheme(
       color: primaryColor,
 
-      shape:  OutlineInputBorder(
+      shape:  const OutlineInputBorder(
           borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(30), bottomLeft: Radius.circular(30))),
       titleTextStyle:TextStyle(fontSize: 24,color: Colors.white,) ,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class Category_srceen extends StatelessWidget {
   List<Container_Category> catgories=[
     Container_Category(Colors.red, 'sports', 'assets/images/ball.png'),

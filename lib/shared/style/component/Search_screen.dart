@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../api/Api_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../screen/News/Article_view_model.dart';
 
 class SearchClass extends SearchDelegate {
   @override
@@ -29,26 +32,36 @@ class SearchClass extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder(
-      future: ApiManager.getArticle(q: query),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        } else if (snapshot.hasData) {
-          var sources = snapshot.data?.articles ?? [];
+    return BlocProvider(
+        create: (context) => ArticleViewModel()..getArticle(q: query),
+        child: BlocConsumer<ArticleViewModel, ArticleStatc>(
+            listener: (context, state) {
+          if (state is LoadingArticleStatc) {
+            const Center(child: CircularProgressIndicator());
+          } else if (state is ErrorArticleStatc) {
+            Text(state.error);
+          } else if (state is SuccessArticleStatc) {}
+        }, builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.builder(
-              itemCount: sources.length,
+              itemCount: ArticleViewModel.get(context).articles?.length,
               itemBuilder: (context, index) {
-                print(sources.length);
+                print(ArticleViewModel.get(context).articles?.length);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ClipPath(
-                        child: Image.network(sources[index].urlToImage ?? '')),
+                        child: Image.network(ArticleViewModel.get(context)
+                                .articles?[index]
+                                .urlToImage ??
+                            '')),
                     Text(
-                      sources[index].source?.name ?? '',
+                      ArticleViewModel.get(context)
+                              .articles?[index]
+                              .source
+                              ?.name ??
+                          '',
                       style: const TextStyle(fontSize: 18, color: Colors.black),
                       textAlign: TextAlign.start,
                     ),
@@ -56,7 +69,8 @@ class SearchClass extends SearchDelegate {
                       height: 10,
                     ),
                     Text(
-                      sources[index].title ?? '',
+                      ArticleViewModel.get(context).articles?[index].title ??
+                          '',
                       style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -67,7 +81,10 @@ class SearchClass extends SearchDelegate {
                       height: 10,
                     ),
                     Text(
-                      sources[index].publishedAt ?? '',
+                      ArticleViewModel.get(context)
+                              .articles?[index]
+                              .publishedAt ??
+                          '',
                       style: const TextStyle(fontSize: 18, color: Colors.black),
                       textAlign: TextAlign.end,
                     ),
@@ -76,15 +93,66 @@ class SearchClass extends SearchDelegate {
                     ),
                   ],
                 );
-                return null;
               },
             ),
           );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+
+          // return FutureBuilder(
+          //   future: ApiManager.getArticle(q: query),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasError) {
+          //       return Text(snapshot.error.toString());
+          //     } else if (snapshot.hasData) {
+          //       var sources = snapshot.data?.articles ?? [];
+          //       return Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          // child: ListView.builder(
+          //   itemCount: sources.length,
+          //   itemBuilder: (context, index) {
+          //     print(sources.length);
+          //     return Column(
+          //       crossAxisAlignment: CrossAxisAlignment.stretch,
+          //       children: [
+          //         ClipPath(
+          //             child: Image.network(sources[index].urlToImage ?? '')),
+          //         Text(
+          //           sources[index].source?.name ?? '',
+          //           style: const TextStyle(fontSize: 18, color: Colors.black),
+          //           textAlign: TextAlign.start,
+          //         ),
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //         Text(
+          //           sources[index].title ?? '',
+          //           style: const TextStyle(
+          //               fontSize: 20,
+          //               fontWeight: FontWeight.bold,
+          //               color: Colors.black),
+          //           textAlign: TextAlign.start,
+          //         ),
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //         Text(
+          //           sources[index].publishedAt ?? '',
+          //           style: const TextStyle(fontSize: 18, color: Colors.black),
+          //           textAlign: TextAlign.end,
+          //         ),
+          //         const SizedBox(
+          //           height: 10,
+          //         ),
+          //       ],
+          //     );
+          //     return null;
+          //   },
+          // ),
+          // );
+          //  } else {
+          //   return const Center(child: CircularProgressIndicator());
+          //   }
+          // },
+        }));
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../shared/style/component/NewsTabs.dart';
+import '../News/NewsTabs.dart';
 import '../../shared/style/component/Search_screen.dart';
 import '../../shared/style/component/Settings.dart';
 import '../Category/Category.dart';

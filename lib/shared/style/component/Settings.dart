@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Settings extends StatelessWidget {
+import '../../../provider/provider_lanauges.dart';
+
+class Settings extends StatefulWidget {
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  List<String> listlanguages = ["english", 'Arabic'];
+
+  String Selected = 'english';
+
   @override
   Widget build(BuildContext context) {
+    var proveter=Provider.of<Provider_lanauges>(context,);
     return Padding(
       padding: const EdgeInsets.all(40),
       child: Column(
@@ -24,7 +37,29 @@ class Settings extends StatelessWidget {
                   'english',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.back_hand))
+                const Spacer(),
+                DropdownButton<String>(
+                  value: Selected,
+                  items: listlanguages
+                      .map((language) => DropdownMenuItem(
+                    value: language,
+                    child: Text(
+                      language,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ))
+                      .toList(),
+                  onChanged: ( language) {
+                    setState(() {
+                      Selected=language!;
+                      if(Selected=='english'){
+                        proveter.changelanganeEN();
+                      }else{
+                        proveter.changelanganeAR();
+                      }
+                    });
+                  },
+                )
               ],
             ),
           )
